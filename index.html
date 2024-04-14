@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>???</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="icon" href="./thinking-face.svg">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+            color: #FFC0CB; /* Pink pastel */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .timer {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        #reveal-btn {
+            display: none;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            background-color: #FFC0CB;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div id="timer" class="timer"></div>
+        <p>Something magical is about to happen! Keep watching as the time melts away...</p>
+        <button id="reveal-btn" onclick="window.location.href='letter.html';">Reveal Surprise</button>
+    </main>
+    <script>
+        // Function to get local time in GMT+7
+        function getLocalTimeInGMT7() {
+            const localTime = new Date();
+            const localTimeOffset = localTime.getTimezoneOffset() * 60000;
+            const gmt7TimeOffset = 7 * 60 * 60 * 1000;
+            return new Date(localTime.getTime() + localTimeOffset + gmt7TimeOffset);
+        }
+
+        // Define the target end time in GMT+7
+        const endTime = getLocalTimeInGMT7();
+        endTime.setHours(23, 0, 0, 0); // Set to 11:00 PM GMT+7
+        if (getLocalTimeInGMT7() > endTime) {
+            endTime.setDate(endTime.getDate() + 1);
+        }
+
+        const timerDisplay = document.getElementById('timer');
+        const revealBtn = document.getElementById('reveal-btn');
+
+        function updateTimer() {
+            const now = getLocalTimeInGMT7();
+            const distance = endTime - now;
+            if (distance < 0) {
+                clearInterval(interval);
+                timerDisplay.style.display = 'none';
+                revealBtn.style.display = 'block';
+                return;
+            }
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        const interval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
