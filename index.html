@@ -55,7 +55,7 @@
 
         // Define the target end time in GMT+7
         const endTime = getLocalTimeInGMT7();
-        endTime.setHours(23, 0, 0, 0); // Set to 11:00 PM GMT+7
+        endTime.setHours(23, 20, 0, 0); // Set to 11:00 PM GMT+7
         if (getLocalTimeInGMT7() > endTime) {
             endTime.setDate(endTime.getDate() + 1);
         }
