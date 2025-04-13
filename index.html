@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>???</title>
+    <title>Second Anniversary Countdown</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="icon" href="./thinking-face.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Sacramento&display=swap" rel="stylesheet">
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: white;
-            color: #FFC0CB; /* Pink pastel */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fdf2f4;
+            color: #FE7696;
+            font-family: 'Sacramento', cursive;
+            background-image: radial-gradient(#ffebeb 15%, transparent 15%),
+                              radial-gradient(#ffebeb 15%, transparent 15%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
         }
         .container {
             display: flex;
@@ -22,62 +27,165 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background-color: white;
+            max-width: 500px;
+            width: 90%;
         }
         .timer {
-            font-size: 4rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 5px;
+            color: #FE7696;
+            text-shadow: 0 0 10px rgba(254, 118, 150, 0.2);
+            animation: pulse 2s infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .timer-unit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+        }
+        .unit-value {
+            font-size: 3.5rem;
+        }
+        .unit-label {
+            font-size: 0.9rem;
+            color: #777;
+            font-family: 'Dancing Script', cursive;
+            margin-top: 5px;
+        }
+        .timer-separator {
+            font-size: 3rem;
+            margin: 0 5px;
+            align-self: flex-start;
+            padding-top: 5px;
+            color: #FE7696;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         #reveal-btn {
             display: none;
             font-size: 1.5rem;
-            padding: 10px 20px;
-            background-color: #FFC0CB;
+            padding: 12px 25px;
+            background-color: #FE7696;
             border: none;
             color: white;
             cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(254, 118, 150, 0.3);
+        }
+        #reveal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(254, 118, 150, 0.4);
+        }
+        p {
+            font-size: 1.4rem;
+            color: #777;
+            font-family: 'Dancing Script', cursive;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+        .countdown-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #FE7696;
+        }
+        .units {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .unit {
+            font-size: 1rem;
+            color: #777;
         }
     </style>
 </head>
 <body>
     <main class="container">
+        <h2 class="countdown-title">Second Anniversary Countdown</h2>
         <div id="timer" class="timer"></div>
-        <p>Something magical is about to happen! Keep watching as the time melts away...</p>
-        <button id="reveal-btn" onclick="window.location.href='letter.html';">Reveal Surprise</button>
+        <div class="units" style="display: none;">
+            <span class="unit">Hours</span>
+            <span class="unit">Minutes</span>
+            <span class="unit">Seconds</span>
+        </div>
+        <p>Something magical is about to bloom! Keep watching as time melts away to our special day...</p>
+        <button id="reveal-btn" onclick="window.location.href='letter.html';">Reveal Our Garden</button>
     </main>
     <script>
-        // Function to get local time in GMT+7
+        // Set the target date to April 14, 2025 at 00:00:00 GMT+7 (Vietnam time)
         function getLocalTimeInGMT7() {
-            const localTime = new Date();
-            const localTimeOffset = localTime.getTimezoneOffset() * 60000;
-            const gmt7TimeOffset = 7 * 60 * 60 * 1000;
-            return new Date(localTime.getTime() + localTimeOffset + gmt7TimeOffset);
+            // Get current date in UTC
+            const now = new Date();
+            // Convert to GMT+7
+            const gmt7Time = new Date(now.getTime() + (7 * 60 * 60 * 1000) + now.getTimezoneOffset() * 60 * 1000);
+            return gmt7Time;
         }
 
-        // Define the target end time in GMT+7
-        const endTime = getLocalTimeInGMT7();
-        endTime.setHours(23, 20, 0, 0); // Set to 11:00 PM GMT+7
-        if (getLocalTimeInGMT7() > endTime) {
-            endTime.setDate(endTime.getDate() + 1);
-        }
+        // Target date: April 14, 2025 at 00:00:00 GMT+7
+        const endTime = new Date(Date.UTC(2025, 3, 13, 17, 0, 0)); // April 13, 2025 17:00 UTC = April 14, 2025 00:00 GMT+7
 
         const timerDisplay = document.getElementById('timer');
         const revealBtn = document.getElementById('reveal-btn');
 
         function updateTimer() {
-            const now = getLocalTimeInGMT7();
+            const now = new Date();
             const distance = endTime - now;
+            
             if (distance < 0) {
                 clearInterval(interval);
                 timerDisplay.style.display = 'none';
                 revealBtn.style.display = 'block';
+                document.querySelector('p').textContent = "It's time to celebrate our love! Click the button below to see our anniversary surprise!";
                 return;
             }
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            // Calculate total hours including days
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const totalHours = (days * 24) + Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            timerDisplay.innerHTML = `
+                <div class="timer-unit">
+                    <span class="unit-value">${totalHours.toString().padStart(2, '0')}</span>
+                    <span class="unit-label">Hours</span>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-unit">
+                    <span class="unit-value">${minutes.toString().padStart(2, '0')}</span>
+                    <span class="unit-label">Minutes</span>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-unit">
+                    <span class="unit-value">${seconds.toString().padStart(2, '0')}</span>
+                    <span class="unit-label">Seconds</span>
+                </div>
+            `;
         }
+        
+        updateTimer(); // Run immediately to avoid delay
         const interval = setInterval(updateTimer, 1000);
+        
+        // Comment out the development mode lines
+        /*
+        document.getElementById('timer').style.display = 'none';
+        document.getElementById('reveal-btn').style.display = 'block';
+        document.querySelector('.units').style.display = 'none';
+        document.querySelector('p').textContent = "Development mode: Click the button below to see the anniversary garden";
+        */
     </script>
 </body>
 </html>
